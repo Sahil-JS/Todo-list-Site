@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useCookies } from'react-cookie';
 
 
-const Modal = ({mode, setShowModal, getData, task}) => {
+const Modal = ({mode, setShowModal, getData, task, darkMode}) => {
 
   const [cookies, setCookie, removeCookie] = useCookies(null)
 
@@ -124,7 +124,7 @@ console.log(data)
               />
                
               
-            </form>
+            </form> 
 
 
         {/* </div> */}

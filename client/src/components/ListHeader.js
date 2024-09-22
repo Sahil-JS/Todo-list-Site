@@ -21,7 +21,7 @@ const ListHeader = ({listNae, getData}) => {
 
     return (
       <div className="list-header">
-      <h1>{listNae}</h1> 
+      <h1 className="todo-header">{listNae}</h1> 
       <div className="button-container">
         <button className="create" onClick={() => setShowModal(true)} >Add Item</button>
         <button className="signOut" onClick={signOut}>signOut</button>

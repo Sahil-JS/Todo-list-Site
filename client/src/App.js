@@ -3,6 +3,7 @@ import ListHeader from './components/ListHeader';
 import ListItems from './components/Listitem';
 import Auth from './components/Auth';
 import { useCookies } from 'react-cookie';
+import Footer from './components/footer'
 
 const App = () => {
 
@@ -12,6 +13,21 @@ const App = () => {
   const userEmail= cookies.Email
   // const [data, setData] = useState([]) // for fetching data from API
   const [tasks, settask] = useState(null)
+
+  // for dark mode -- 
+  const [darkMode, setDarkMode] = useState(false);
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    setDarkMode((prevMode) => !prevMode);
+  };
+  // Apply the theme to the body element by changing the data-theme attribute
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  }, [darkMode]);
 
   // const authToken = false
   
@@ -55,19 +71,27 @@ const App = () => {
 
 
   return (
-    <div className='app'>
+    <div className={`app ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+    {/* Dark Mode Toggle Button */}
+    <header>
+      <button onClick={toggleDarkMode}>
+        {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+      </button>
+    </header>
+    
       {!authToken && <Auth/>}
       {
         authToken &&
         <>
-        <ListHeader listNae={'holiday tick list'} getData={getData}/>
+        <ListHeader listNae={`Let's Get Things Done!`} getData={getData}/>
         <p className='user-email'>Welcome back {userEmail}</p>
         {sortedTasks?.map((task) => <ListItems key={task.id} task={task} getData={getData} />)}
 
        
       
      </>}
-     <p className='copyright'> sahil's todo yo</p>
+     <p className='copyright'>  © ToDo site by Sahil Vishwakarma</p>
+     <Footer />
     </div>
   )
 }

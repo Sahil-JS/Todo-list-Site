@@ -1,0 +1,52 @@
+# Node modules
+node_modules/
+
+# Build output
+build/
+dist/
+
+# Dependency directories
+jspm_packages/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+*.log
+logs/
+*.pid
+*.seed
+
+# IDE/editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+*.lcov
+
+# React specific files
+*.gz
+
+# Miscellaneous
+*.swp
+*.swo
+*.tmp
+*.bak
+*.orig
+
+# Yarn
+.yarn/
+.pnp.*

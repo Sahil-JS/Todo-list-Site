@@ -1,17 +1,69 @@
 import { useState } from 'react';
+import { useCookies } from'react-cookie';
 
 
-const Modal = ({mode, setShowModal}) => {
+const Modal = ({mode, setShowModal, getData, task}) => {
+
+  const [cookies, setCookie, removeCookie] = useCookies(null)
 
   // const mode = 'create'
   const editMode = mode === "edit" ? true : false
 
   const [data, setData] = useState({
-    user_email:'',
-    title:'',
-    progress:'',
-    date: editMode ? '' : new Date()
+    user_email:editMode ? task.user_email : cookies.Email ,
+    title:editMode ? task.title : null,
+    progress: editMode ? task.progress  : 40,
+    date: editMode ? task.date : new Date()
   })
+  
+
+  const postData = async (e) => {
+    e.preventDefault()
+    try {
+     const response = await fetch(`${process.env.REACT_APP_SERVERURL}/todos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      console.log(response)
+      if (response.status === 200) {
+        setShowModal(false)
+        console.log('Data sent')
+        // fetch data again after successful post
+        getData()
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  const editData = async (e) => {
+    e.preventDefault()
+    try {
+     const response = await fetch(`${process.env.REACT_APP_SERVERURL}/todos/${task.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      console.log(response)
+      if (response.status === 200) {
+        setShowModal(false)
+        console.log('Data sent')
+        // fetch data again after successful post
+        getData()
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
 
 
 
@@ -39,9 +91,9 @@ console.log(data)
 
           <div className="form-title-container"> 
             <h3>
-              lets  {mode} your task
+              let's  {mode} your task
             </h3>
-            <button className="close-modal" onClick={()=> setShowModal(false)}>x</button>
+            <button className="close-modal" onClick={()=> setShowModal(false)}>X</button>
             </div>
 
 
@@ -68,7 +120,8 @@ console.log(data)
               onChange={handleChange}
               />
 
-              <input className={mode} type="submit"/>
+              <input className={mode} type="submit" onClick={editMode? editData : postData}
+              />
                
               
             </form>

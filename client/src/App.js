@@ -1,19 +1,27 @@
 import { useEffect, useState } from 'react';
 import ListHeader from './components/ListHeader';
 import ListItems from './components/Listitem';
+import Auth from './components/Auth';
+import { useCookies } from 'react-cookie';
 
 const App = () => {
 
+  const [cookies, setCookie, removeCookie] = useCookies(null)
+  // const [authToken, setAuthToken] = useState(false)
+  const authToken = cookies.AuthToken
+  const userEmail= cookies.Email
   // const [data, setData] = useState([]) // for fetching data from API
   const [tasks, settask] = useState(null)
+
+  // const authToken = false
   
 
   const getData = async () => {
-    const userEmail ='sahil@test.com'     
+    // const userEmail ='sahil@test.com'     
 
     
     try {
-      const response = await fetch(`http://localhost:8000/todos/${userEmail}`)
+      const response = await fetch(`${process.env.REACT_APP_SERVERURL}/todos/${userEmail}`)
       const data = await response.json()
       settask(data)
       // console.log(data)
@@ -30,6 +38,12 @@ const App = () => {
 
 
   
+   useEffect(() => {
+    if (authToken) {
+      getData()
+    }
+   }, [])
+
 
   // calling the function
   // / useEffect to run getData only once when the component mounts
@@ -42,9 +56,18 @@ const App = () => {
 
   return (
     <div className='app'>
-     <ListHeader listNae={'holiday tick list'}/>
-     {sortedTasks?.map((task) => <ListItems key={task.id} task={task} />)}
-     
+      {!authToken && <Auth/>}
+      {
+        authToken &&
+        <>
+        <ListHeader listNae={'holiday tick list'} getData={getData}/>
+        <p className='user-email'>Welcome back {userEmail}</p>
+        {sortedTasks?.map((task) => <ListItems key={task.id} task={task} getData={getData} />)}
+
+       
+      
+     </>}
+     <p className='copyright'> sahil's todo yo</p>
     </div>
   )
 }

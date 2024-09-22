@@ -1,14 +1,20 @@
 import Modal from "./Modal"
 import { useState } from'react';
+import { useCookies } from "react-cookie";
 
 
 
-const ListHeader = ({listNae}) => {
+const ListHeader = ({listNae, getData}) => {
+
+  const [cookies, setCookie, removeCookie] = useCookies(null)
 
   const [showModal, setShowModal] = useState(false)
 
       const signOut = () => {
         console.log("signed out")
+        removeCookie('AuthToken')
+        removeCookie('Email')
+        window.location.reload() 
       }
 
 
@@ -20,7 +26,7 @@ const ListHeader = ({listNae}) => {
         <button className="create" onClick={() => setShowModal(true)} >Add Item</button>
         <button className="signOut" onClick={signOut}>signOut</button>
       </div>
-      {showModal && <Modal mode={'create'} setShowModal={setShowModal}/>}
+      {showModal && <Modal mode={'create'} setShowModal={setShowModal} getData={getData}/>}
       </div>
     )
   }
